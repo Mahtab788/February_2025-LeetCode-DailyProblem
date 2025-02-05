@@ -1,0 +1,31 @@
+#.1790. Check if One String Swap Can Make Strings Equal.
+class Solution {
+    public boolean areAlmostEqual(String s1, String s2) {
+        // If the strings are already equal, no swap is needed
+        if (s1.equals(s2)) {
+            return true;
+        }
+
+        // List to store the indices where characters are different
+        List<Integer> diffIndices = new ArrayList<>();
+
+        // Iterate through both strings and collect the differing indices
+        for (int i = 0; i < s1.length(); i++) {
+            if (s1.charAt(i) != s2.charAt(i)) {
+                diffIndices.add(i);
+            }
+        }
+
+        // If there are not exactly two differing positions, return false
+        if (diffIndices.size() != 2) {
+            return false;
+        }
+
+        // Get the indices of the two differing characters
+        int i = diffIndices.get(0);
+        int j = diffIndices.get(1);
+
+        // Check if swapping s1[i] with s1[j] will make the strings equal
+        return s1.charAt(i) == s2.charAt(j) && s1.charAt(j) == s2.charAt(i);
+    }
+}
