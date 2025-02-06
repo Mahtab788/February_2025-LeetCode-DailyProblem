@@ -1,0 +1,28 @@
+#.1726. Tuple with Same Product.
+
+class Solution {
+    public int tupleSameProduct(int[] nums) {
+        // HashMap to store the product of pairs and how many times each product occurs
+        HashMap<Integer, Integer> productCountMap = new HashMap<>();
+        int result = 0;
+
+        // Iterate over all pairs (a, b)
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                // Calculate the product of the pair (nums[i], nums[j])
+                int product = nums[i] * nums[j];
+
+                // If this product already exists in the map, increment the result by the count of previous pairs with the same product
+                if (productCountMap.containsKey(product)) {
+                    result += productCountMap.get(product);
+                }
+
+                // Increment the count for this product
+                productCountMap.put(product, productCountMap.getOrDefault(product, 0) + 1);
+            }
+        }
+
+        // Return the total number of valid tuples
+        return result * 8;  // Because each valid pair can form 8 distinct tuples
+    }
+}
