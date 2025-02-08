@@ -1,0 +1,31 @@
+#.2349. Design a Number Container System.
+
+
+class NumberContainers {
+    private Map<Integer, Integer> indexToNum;
+    private Map<Integer, TreeSet<Integer>> numToIndices;
+
+    public NumberContainers() {
+        indexToNum = new HashMap<>();
+        numToIndices = new HashMap<>();
+    }
+
+    public void change(int index, int number) {
+        if (indexToNum.containsKey(index)) {
+            int oldNumber = indexToNum.get(index);
+            if (oldNumber == number) return; // No need to update if same
+
+            numToIndices.get(oldNumber).remove(index);
+            if (numToIndices.get(oldNumber).isEmpty()) {
+                numToIndices.remove(oldNumber);
+            }
+        }
+
+        indexToNum.put(index, number);
+        numToIndices.computeIfAbsent(number, k -> new TreeSet<>()).add(index);
+    }
+
+    public int find(int number) {
+        return numToIndices.containsKey(number) ? numToIndices.get(number).first() : -1;
+    }
+}
