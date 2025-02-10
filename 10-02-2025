@@ -1,0 +1,22 @@
+#.3174. Clear Digits.
+class Solution {
+    public String clearDigits(String s) {
+        // Stack to keep track of characters
+        StringBuilder result = new StringBuilder();
+        
+        // Traverse through the string
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                // If the character is a digit, remove the previous character if available
+                if (result.length() > 0) {
+                    result.deleteCharAt(result.length() - 1); // Remove the last character (non-digit)
+                }
+            } else {
+                // If the character is not a digit, add it to the result
+                result.append(c);
+            }
+        }
+        
+        return result.toString();
+    }
+}
