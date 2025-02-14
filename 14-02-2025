@@ -1,0 +1,36 @@
+#.1352. Product of the Last K Numbers.
+
+class ProductOfNumbers {
+    private List<Integer> prefixProduct;
+    private int lastZeroIndex; // To track the last zero
+
+    public ProductOfNumbers() {
+        prefixProduct = new ArrayList<>();
+        prefixProduct.add(1); // Helps in division calculation
+        lastZeroIndex = -1;
+    }
+    
+    public void add(int num) {
+        if (num == 0) {
+            prefixProduct.clear();
+            prefixProduct.add(1);
+            lastZeroIndex = prefixProduct.size() - 1;
+        } else {
+            int lastProduct = prefixProduct.get(prefixProduct.size() - 1);
+            prefixProduct.add(lastProduct * num);
+        }
+    }
+    
+    public int getProduct(int k) {
+        int n = prefixProduct.size();
+        if (k >= n) return 0; // If k exceeds available elements after last zero
+        return prefixProduct.get(n - 1) / prefixProduct.get(n - k - 1);
+    }
+}
+
+/**
+ * Example Usage:
+ * ProductOfNumbers obj = new ProductOfNumbers();
+ * obj.add(num);
+ * int param_2 = obj.getProduct(k);
+ */
