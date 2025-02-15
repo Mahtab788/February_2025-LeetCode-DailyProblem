@@ -1,0 +1,26 @@
+#.2698. Find the Punishment Number of an Integer.
+
+class Solution {
+    public int punishmentNumber(int n) {
+        int totalSum = 0;
+        for (int i = 1; i <= n; i++) {
+            int square = i * i;
+            if (canPartition(String.valueOf(square), 0, i)) {
+                totalSum += square;
+            }
+        }
+        return totalSum;
+    }
+
+    private boolean canPartition(String s, int index, int target) {
+        if (index == s.length()) return target == 0;
+
+        int sum = 0;
+        for (int j = index; j < s.length(); j++) {
+            sum = sum * 10 + (s.charAt(j) - '0'); // Convert substring to number
+            if (sum > target) break; // Prune unnecessary calculations
+            if (canPartition(s, j + 1, target - sum)) return true;
+        }
+        return false;
+    }
+}
