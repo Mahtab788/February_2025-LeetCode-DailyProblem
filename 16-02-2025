@@ -1,0 +1,39 @@
+#.1718. Construct the Lexicographically Largest Valid Sequence.
+
+
+class Solution {
+    public int[] constructDistancedSequence(int n) {
+        int len = 2 * n - 1;
+        int[] res = new int[len];
+        boolean[] used = new boolean[n + 1]; // Track used numbers
+        
+        backtrack(res, used, 0, n);
+        return res;
+    }
+    
+    private boolean backtrack(int[] res, boolean[] used, int index, int n) {
+        if (index == res.length) return true; // Found valid sequence
+
+        if (res[index] != 0) return backtrack(res, used, index + 1, n); // Skip filled
+        
+        for (int num = n; num >= 1; num--) { // Place largest first
+            if (used[num]) continue;
+            int secondPos = (num > 1) ? index + num : index;
+
+            if (secondPos < res.length && res[secondPos] == 0) {
+                // Place the number
+                res[index] = num;
+                if (num > 1) res[secondPos] = num;
+                used[num] = true;
+                
+                if (backtrack(res, used, index + 1, n)) return true; // Continue
+                
+                // Backtrack
+                res[index] = 0;
+                if (num > 1) res[secondPos] = 0;
+                used[num] = false;
+            }
+        }
+        return false;
+    }
+}
