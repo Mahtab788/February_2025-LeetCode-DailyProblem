@@ -1,0 +1,66 @@
+#.2467. Most Profitable Path in a Tree.
+
+
+class Solution {
+    public int mostProfitablePath(int[][] edges, int bob, int[] amount) {
+        int n = amount.length;
+        
+        // Step 1: Construct adjacency list
+        List<Integer>[] tree = new ArrayList[n];
+        for (int i = 0; i < n; i++) tree[i] = new ArrayList<>();
+        for (int[] edge : edges) {
+            tree[edge[0]].add(edge[1]);
+            tree[edge[1]].add(edge[0]);
+        }
+
+        // Step 2: Track Bob's arrival time at each node
+        int[] bobTime = new int[n];
+        Arrays.fill(bobTime, Integer.MAX_VALUE);
+        findBobTime(bob, -1, 0, tree, bobTime);
+
+        // Step 3: DFS for Alice to maximize profit
+        return dfsAlice(0, -1, 0, tree, bobTime, amount);
+    }
+    
+    // BFS or DFS to find Bob's arrival time at each node
+    private boolean findBobTime(int node, int parent, int time, List<Integer>[] tree, int[] bobTime) {
+        if (node == 0) { 
+            bobTime[node] = time; 
+            return true;
+        }
+        
+        for (int neighbor : tree[node]) {
+            if (neighbor != parent && findBobTime(neighbor, node, time + 1, tree, bobTime)) {
+                bobTime[node] = time;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // DFS for Alice to find maximum profit path
+    private int dfsAlice(int node, int parent, int time, List<Integer>[] tree, int[] bobTime, int[] amount) {
+        // Calculate Alice's earnings based on Bob's presence
+        if (time < bobTime[node]) { 
+            // Alice reaches first: full amount
+        } else if (time == bobTime[node]) { 
+            // Simultaneous arrival: split amount
+            amount[node] /= 2;
+        } else { 
+            // Bob reaches first: no profit for Alice
+            amount[node] = 0;
+        }
+
+        int maxProfit = Integer.MIN_VALUE;
+        boolean isLeaf = true;
+        
+        for (int neighbor : tree[node]) {
+            if (neighbor != parent) {
+                isLeaf = false;
+                maxProfit = Math.max(maxProfit, dfsAlice(neighbor, node, time + 1, tree, bobTime, amount));
+            }
+        }
+
+        return amount[node] + (isLeaf ? 0 : maxProfit);
+    }
+}
