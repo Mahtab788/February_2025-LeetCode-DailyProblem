@@ -1,0 +1,23 @@
+#.1524. Number of Sub-arrays With Odd Sum.
+class Solution {
+    private static final int MOD = 1_000_000_007;
+
+    public int numOfSubarrays(int[] arr) {
+        int oddCount = 0, evenCount = 1; // evenCount starts at 1 for the empty prefix
+        int prefixSum = 0;
+        int result = 0;
+
+        for (int num : arr) {
+            prefixSum += num;
+            if (prefixSum % 2 == 0) {
+                // Even prefix sum -> add oddCount subarrays
+                result = (result + oddCount) % MOD;
+                evenCount++;
+            } else {
+                // Odd prefix sum -> add evenCount subarrays
+                result = (result + evenCount) % MOD;
+                oddCount++;
+            }
+        }
+        return result;
+    }
